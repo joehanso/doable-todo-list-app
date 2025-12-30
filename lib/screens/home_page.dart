@@ -80,15 +80,7 @@ class _HomePageState extends State<HomePage> {
     return [...a, ...b];
   }
 
-  void _clearFilters() {
-    setState(() {
-      _fltDate = null;
-      _fltTime = null;
-      _fltCompleted = null;
-      _fltRepeat = null;
-      _fltReminder = null;
-    });
-  }
+  // Removed unused _clearFilters() to avoid analyzer warnings.
 
   @override
   void initState() {
@@ -463,12 +455,10 @@ class _FilterChipButton extends StatelessWidget {
     required this.label,
     required this.onTap,
     this.height = 36,
-    this.minWidth = 96,
   });
 
   final String label;
   final VoidCallback onTap;
-  final double minWidth;
   final double height;
 
   @override

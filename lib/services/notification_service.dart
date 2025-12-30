@@ -19,12 +19,12 @@ class NotificationService {
     // Check if user has enabled notifications
     final userEnabled = await areNotificationsEnabledByUser();
     if (!userEnabled) {
-      print('Notification not scheduled: user has disabled notifications');
+      debugPrint('Notification not scheduled: user has disabled notifications');
       return;
     }
 
     if (!task.hasNotification || task.time == null || task.date == null) {
-      print('Notification not scheduled: hasNotification=${task.hasNotification}, time=${task.time}, date=${task.date}');
+      debugPrint('Notification not scheduled: hasNotification=${task.hasNotification}, time=${task.time}, date=${task.date}');
       return;
     }
 
@@ -45,11 +45,11 @@ class NotificationService {
         time.minute,
       );
 
-      print('Scheduling notification for ${task.title} at $scheduledDateTime');
+      debugPrint('Scheduling notification for ${task.title} at $scheduledDateTime');
 
       // Don't schedule if the time has already passed
       if (scheduledDateTime.isBefore(DateTime.now())) {
-        print('Notification not scheduled: time has already passed');
+        debugPrint('Notification not scheduled: time has already passed');
         return;
       }
 
@@ -72,7 +72,7 @@ class NotificationService {
         ),
       );
     } catch (e) {
-      print('Error scheduling notification: $e');
+      debugPrint('Error scheduling notification: $e');
     }
   }
 
@@ -93,7 +93,7 @@ class NotificationService {
     // Check if user has enabled notifications
     final userEnabled = await areNotificationsEnabledByUser();
     if (!userEnabled) {
-      print('Not rescheduling notifications: user has disabled notifications');
+      debugPrint('Not rescheduling notifications: user has disabled notifications');
       await cancelAllNotifications();
       return;
     }

@@ -30,9 +30,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   // Colors (replace with Theme if preferred)
   static const Color blueColor = Color(0xFF2563EB); // Tailwind-ish blue-600
-  static const Color black = Colors.black;
   static const Color white = Colors.white;
-  static const double kRadius = 16;
 
   // Layout helpers
   EdgeInsets get _screenHPad {

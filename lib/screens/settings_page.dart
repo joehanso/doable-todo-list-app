@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
+// 'awesome_notifications' import removed because it's no longer used after cleanup.
 
 import 'package:doable_todo_list_app/services/notification_service.dart';
 import 'package:doable_todo_list_app/repositories/task_repository.dart';
@@ -53,22 +53,24 @@ class _SettingsPageState extends State<SettingsPage> {
         try {
           final tasks = await TaskRepository().fetchAll();
           await NotificationService.rescheduleAllNotifications(tasks);
+          if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Notifications enabled and scheduled')),
           );
         } catch (e) {
-          print('Error rescheduling notifications: $e');
+          debugPrint('Error rescheduling notifications: $e');
         }
       }
     } else {
       // When disabling notifications, cancel all scheduled notifications
       try {
         await NotificationService.cancelAllNotifications();
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('All notifications cancelled')),
         );
       } catch (e) {
-        print('Error cancelling notifications: $e');
+        debugPrint('Error cancelling notifications: $e');
       }
     }
 
@@ -82,42 +84,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<bool> _requestNotificationPermission() async {
     return await NotificationService.requestPermissions();
   }
-
-  Future<void> _sendTestNotification() async {
-    // Check both system permission and user preference
-    final isAllowed = await NotificationService.isNotificationAllowed();
-    if (!isAllowed) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Notification permission required')),
-      );
-      return;
-    }
-
-    if (!_notificationsEnabled) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Notifications are disabled in settings')),
-      );
-      return;
-    }
-
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: 999999, // Use a high ID for test notifications
-        channelKey: NotificationService.channelKey,
-        title: 'Test Notification',
-        body: 'This is a test notification to verify notifications are working!',
-        category: NotificationCategory.Reminder,
-        payload: {'test': 'true'},
-      ),
-    );
-
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Test notification sent')),
-    );
-  }
+  // The test notification helper was removed because it was not referenced.
 
   Future<void> _confirmAndClearAll() async {
     final confirm = await showDialog<bool>(
@@ -322,12 +289,12 @@ class _SocialIconButton extends StatelessWidget {
       onTap: onTap,
       radius: 28,
       customBorder: const CircleBorder(),
-      child: Container(
+        child: Container(
         width: 50,
         height: 50,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.black.withOpacity(0.04),
+          color: Color.fromRGBO(0, 0, 0, 0.04),
         ),
         alignment: Alignment.center,
         child: Tooltip(

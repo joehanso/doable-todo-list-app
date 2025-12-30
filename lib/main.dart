@@ -41,19 +41,19 @@ Future<void> main() async {
   // Request notification permissions
   final hasPermission = await NotificationService.requestPermissions();
   if (!hasPermission) {
-    print('Notification permission denied');
+    debugPrint('Notification permission denied');
   } else {
-    print('Notification permission granted');
+    debugPrint('Notification permission granted');
   }
 
   // Reschedule pending notifications
   try {
     final tasks = await TaskRepository().fetchAll();
-    print('Rescheduling ${tasks.length} tasks');
+    debugPrint('Rescheduling ${tasks.length} tasks');
     await NotificationService.rescheduleAllNotifications(tasks);
-    print('Notifications rescheduled successfully');
+    debugPrint('Notifications rescheduled successfully');
   } catch (e) {
-    print('Error rescheduling notifications: $e');
+    debugPrint('Error rescheduling notifications: $e');
   }
 
   //status bar & navigation bar colors and themes
